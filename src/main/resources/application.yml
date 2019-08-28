@@ -1,0 +1,86 @@
+server:
+  tomcat:
+     uri-encoding: UTF-8
+  port: 8031
+#  port: 443
+#  ssl:
+#     key-store: tomcat.keystore
+#     key-store-password: 123456789
+#     keyStoreType: JKS
+#     keyAlias: tomcat
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  profiles:
+      active: prod
+  application:
+    name: upms-jira-ucs-projectno
+#  session:
+#    store-type: Redis
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password: foobared
+
+  messages:
+    encoding: UTF-8
+
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
+    static-path-pattern: /static/**
+
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+    static-path-pattern: /static/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://174.34.90.112:8762/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    easeExpirationDurationInSeconds: 10
+
+ldap:
+  url: ldap://174.34.50.5:389/
+  name: workflow@uaes.com
+  password: uaes,111
+  baseDomain: OU=8_TempUser,OU=1_UserAccount,DC=uaes,DC=com
+#  baseDomain: OU=NE1,OU=NE,OU=1_Shanghai,ou=1_UserAccount,DC=uaes,DC=com;
+#                OU=NE2,OU=NE,OU=1_Shanghai,ou=1_UserAccount,DC=uaes,DC=com;
+#                OU=NE5,OU=NE,OU=1_Shanghai,ou=1_UserAccount,DC=uaes,DC=com;
+#                OU=4_Chongqing,ou=1_UserAccount,DC=uaes,DC=com;
+#                OU=8_TempUser,OU=1_UserAccount,DC=uaes,DC=com;
+#                OU=EC_PD,OU=1_Shanghai,OU=1_UserAccount,DC=uaes,DC=com
+
+# 分页配置
+pagehelper:
+  # helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+     root: error
+     com.uaes.esw.mapper: info
+     com.uaes.esw.controller: info
+     com.uaes.esw.service: info
+#    默认日志文件名
+#     file: log
+#     默认日志路径
+#     path: ./log
+#     logback.xml路径，默认为classpath:logback.xml

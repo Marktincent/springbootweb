@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"></property>
+            <property name="suppressDate" value="true"></property>
+            <!-- java 文件编码格式  -->
+            <property name="javaFileEncoding" value="utf-8"/>
+        </commentGenerator>
+
+        <!-- jdbc 连接信息  -->
+        <jdbcConnection driverClass="${driverClass}"
+                        connectionURL="${connectionURL}"
+                        userId="${userId}"
+                        password="${password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 实体类所在包名 -->
+        <javaModelGenerator targetPackage="${modelPackage}.mysql" targetProject="${src_main_java}">
+            <property name="enableSubPackages" value="true"></property>
+            <property name="trimStrings" value="true"></property>
+        </javaModelGenerator>
+
+        <!-- xml 所在包名 -->
+        <sqlMapGenerator targetPackage="${sqlMapperPackage}.mysql" targetProject="${src_main_resources}">
+            <property name="enableSubPackages" value="true"></property>
+        </sqlMapGenerator>
+
+        <!-- mapper 所在包名 -->
+        <javaClientGenerator targetPackage="${mapperPackage}.mysql" targetProject="${src_main_java}"
+                             type="ANNOTATEDMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 要生成的表 -->
+        <!-- 这里的百分号代表对该数据库中所有的表进行生成 -->
+        <!--<table tableName="worklog">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+
+        <!-- 数据库表 -->
+        <!--<table schema="test" tableName="worklog" domainObjectName="WorkLog">
+            &lt;!&ndash; 设置别名 &ndash;&gt;
+            <columnOverride column="id" property="id"/>
+            <columnOverride column="hours" property="hours"/>
+            <columnOverride column="createtime" property="createtime"/>
+        </table>-->
+
+        <!--<table schema="test" tableName="user" domainObjectName="User">
+            &lt;!&ndash; 设置别名 &ndash;&gt;
+            <columnOverride column="id" property="id"/>
+            <columnOverride column="username" property="username"/>
+            <columnOverride column="email" property="email"/>
+        </table>-->
+
+        <table schema="jira" tableName="projectcode" domainObjectName="ProjectCode">
+        </table>
+    </context>
+</generatorConfiguration>

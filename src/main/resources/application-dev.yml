@@ -1,0 +1,35 @@
+mysql:
+  jdbc-url: jdbc:mysql://174.34.90.112:3306/jira
+  username: swbuildlog
+  password: uaes1234
+  maximum-pool-size: 30
+
+oracle:
+  jdbc-url: jdbc:oracle:thin:@174.34.51.66:1521:ucs
+  username: ucs
+  password: ucs
+  maximum-pool-size: 30
+
+
+ucs-ds:
+  jdbc-url: jdbc:oracle:thin:@174.34.51.66:1521/ucs
+  username: ucs
+  password: ucs
+  maximum-pool-size: 30
+
+ucs-obpmdir:
+  jdbc-url: jdbc:oracle:thin:@174.34.51.66:1521/ucs
+  username: obpmdir
+  password: system
+  maximum-pool-size: 30
+
+postgres:
+  jdbc-url: jdbc:postgresql://174.34.59.220:5432/jira
+  username: postgres
+  password: uaes,123
+  maximum-pool-size: 30
+
+jiraconfig:
+  issueUrl: http://174.34.59.220:8080/rest/api/2/issue/
+  username: jira
+  password: uaes,123

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>pageList</title>
+    <link rel="stylesheet" th:href="@{../static/bootstrap-3.3.7/css/bootstrap.css}"/>
+    <script th:src="@{../static/scripts/jquery.min.js}"></script>
+    <script th:src="@{../static/bootstrap-3.3.7/js/bootstrap.js}"></script>
+    <script th:src="@{../static/scripts/footer.js}"></script>
+    <script>
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="container">
+    <form th:action="@{${requestUrl}}">
+        <input name="like_projectcode" class="form-control" type="text"
+               placeholder="请输入项目号..." th:value="${like_projectcode}"/><br/>
+        <input name="like_customercode" class="form-control" type="text"
+               placeholder="请输入客户号..." th:value="${like_customercode}"/><br/>
+        <input type="submit" value="查询"/>
+    </form>
+    <br/>
+    <table class="table table-striped">
+        <tr>
+            <th>项目</th>
+            <th>客户号</th>
+            <th>日期</th>
+        </tr>
+        <tr th:each="user : ${pageInfo.list}">
+            <td th:text="${user.projectcode}"></td>
+            <td th:text="${user.customercode}"></td>
+            <td th:text="${user.createyear}"></td>
+        </tr>
+    </table>
+    <div th:include="fragments/footer :: pageFooterDiv"></div>
+</div>
+</body>
+</html>

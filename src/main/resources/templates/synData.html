@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>同步数据</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" th:src="@{/static/scripts/jquery-1.8.3.min.js}"></script>
+    <style type="text/css">
+        table{ width:1200px; }
+        table tr td{ border-bottom:#FF0000 solid 1px;text-align:left;}
+    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/easyui/jquery-easyui-1.7.0/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/easyui/jquery-easyui-1.7.0/themes/icon.css}">
+    <script type="text/javascript" th:src="@{/static/easyui/jquery-easyui-1.7.0/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/easyui/jquery-easyui-1.7.0/jquery.easyui.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <form>
+        <h1 align="center">UCS,JIRA协同工作</h1>
+        <hr>
+        <table align="center">
+            <tr>
+                <td>
+                    UPMS-->JIRA(同步upms项目编号到jira)
+                </td>
+                <td>
+                    <input type="text" name="createTime1" id="createTime1"
+                           value="2018-10_2018-11"/><input
+                        type="button" name=""
+                        value="同步到jira"
+                        onclick="sysUpmsnoToJira();"
+                        style="background-color: #7ED321;width: 76px;height: 36px;color: #FFFFFF">
+                    <br/>
+                    <span id="showMsg1"></span>
+                    <br/>
+                    <br/>
+                </td>
+                <td>
+                    <span>时间格式：<font color="red">2018-03_2018-08</font> (左开右闭) <br/>不填：<font
+                            color="red">同步当前月</font></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    UPMS ProjectNo --> UCS(同步upms项目编号到ucs)
+                </td>
+                <td>
+                    <br/>
+                    <br/>
+                    <input type="text" name="createTime2" id="createTime2" value="2018-10_2018-11"/><input
+                        type="button" name=""
+                        value="同步到ucs"
+                        onclick="sysUpmsnoToUcs();"
+                        style="background-color: #7ED321;width: 76px;height: 36px;color: #FFFFFF">
+                    <br/>
+                    <span id="showMsg2"></span>
+                    <br/>
+                    <br/>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    JIRA Hours -- > BO(UCS)(同步UCS的JIRA工时到分摊表)
+                </td>
+                <td>
+                    <br/>
+                    <br/>
+                    <input type="text" name="createTime3" id="createTime3" value="2019-07-01_2019-07-27"/><input
+                        type="button" name=""
+                        value="同步到ucs"
+                        onclick="sysUcsJiraToFentan();"
+                        style="background-color: #7ED321;width: 76px;height: 36px;color: #FFFFFF"/>
+                    <br/>
+                    <span id="showMsg3"></span>
+                    <br/>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    同步ucs的角色
+                </td>
+                <td>
+                    <br/>
+                    角色:
+                    <br/>
+                    <select id="cc" name="selRoles" style="width:250px"></select>
+                    <div id="sp">
+                        <div style="color:#99BBE8;background:#fafafa;padding:5px;">
+                            <input type="checkbox" name="selmuti" value="ALL" id="selmuti"
+                                   onclick="selAllCheckbox(this);"><span>全选/全不选</span><br/></div>
+                        <div style="padding:5px" id="ccOptions">
+                        </div>
+                    </div>
+                    <br/>
+                    人员:
+                    <br/>
+                    <input type="text" name="people" id="people" value="zhenghuan.wang"/><input
+                        type="button" name=""
+                        value="同步ucs角色"
+                        onclick="synUcsRoles();"
+                        style="background-color: #7ED321;width: 76px;height: 36px;color: #FFFFFF"/>
+                    <br/>
+                    <span id="showMsg4"></span>
+                    <br/>
+                    <br/>
+                </td>
+                <td>
+                    不填写角色为默认<font color="red">(DC_动态,DC,UAES员工,PA_动态,<br/>系统工程师,软件工程师,项目安全经理)
+                    <br/></font>人员必填<font color="red">多人用逗号","隔开;<br/>[每天同步一次所有人的默认角色]。</font>
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    迁移upms_project数据
+                </td>
+                <td>
+                    <br/>
+                    <br/>
+                    <input
+                            type="button" name=""
+                            value="迁移upms_project数据"
+                            onclick="migrateData();"
+                            style="background-color: #7ED321;width: 76px;height: 36px;color: #FFFFFF"/>
+                    <br/>
+                    <span id="showMsg5"></span>
+                    <br/>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+
+<script type="text/javascript">
+    var protocol = window.location.protocol;
+    var host = window.location.host;
+    var baseUrl = protocol + "//" + host;
+
+    function openFile(){
+        var url = '\\\\file-sh\\NE1\\NE1_DLP\\SS1\\003\\02_EN13_Knowledge\\System\\Tools\\02_ReleaseTool\\TestStandard\\UD8\\CA\\ZJ1006A100_release\\xSRL.cmd';
+        alert(url);
+        window.open(url,'_blank','width=600,height=400,top=100px,left=0px')
+    }
+    function getNowDate() {
+         var date = new Date();
+         var sign1 = "-";
+         var sign2 = ":";
+         var year = date.getFullYear() // 年
+         var month = date.getMonth() + 1; // 月
+         var day  = date.getDate(); // 日
+         var hour = date.getHours(); // 时
+         var minutes = date.getMinutes(); // 分
+         var seconds = date.getSeconds(); //秒
+         var millseconds = date.getMilliseconds();
+         var weekArr = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'];
+         var week = weekArr[date.getDay()];
+         // 给一位数数据前面加 “0”
+         if (month >= 1 && month <= 9) {
+          month = "0" + month;
+         }
+         if (day >= 0 && day <= 9) {
+          day = "0" + day;
+         }
+         if (hour >= 0 && hour <= 9) {
+          hour = "0" + hour;
+         }
+         if (minutes >= 0 && minutes <= 9) {
+          minutes = "0" + minutes;
+         }
+         if (seconds >= 0 && seconds <= 9) {
+          seconds = "0" + seconds;
+         }
+
+         // var currentdate = year + sign1 + month + sign1 + day + " " + hour + sign2 + minutes + sign2 + seconds + " " + week;
+         var currentdate = hour + sign2 + minutes + sign2 + seconds + sign2 + millseconds;
+         return currentdate;
+    }
+    function sysUpmsnoToJira(){
+        var createTime = $("#createTime1").val();
+        //alert(createTime);
+        $.ajax({
+            type: "get",
+            url: baseUrl + "/synUpmsno",
+            data: {"createTime":createTime},
+            dataType: "text",
+            success: function (data) {
+                $("#showMsg1").html("<font color='green'>" + getNowDate() +"执行完毕！</font>");
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    }
+    function sysUpmsnoToUcs(){
+        var createTime = $("#createTime2").val();
+        //alert(createTime);
+        $.ajax({
+            type: "get",
+            url: baseUrl + "/synUpmsnoToUcs",
+            data: {"createTime":createTime},
+            dataType: "text",
+            success: function (data) {
+                $("#showMsg2").html("<font color='green'>" + getNowDate() +"执行完毕！</font>");
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    }
+
+    function sysUcsJiraToFentan(){
+        var createTime = $("#createTime3").val();
+        var url = baseUrl + "/gsftData";
+        //url = "@{/gsftData}";
+        //alert(url);
+        $.ajax({
+            type: "get",
+            url: url,
+            data: {"synchronizeTime":createTime},
+            dataType: "text",
+            success: function (data) {
+                $("#showMsg3").html("<font color='green'>" + getNowDate() +"执行完毕！</font>");
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    }
+
+    $(function () {
+        getRolesMap();
+        initCCCombobox();
+    });
+
+    function getRolesMap(){
+        var url = baseUrl + "/getRolesMap";
+        $.ajax({
+            type: "get",
+            url: url,
+            data: {},
+            dataType:"json",
+            async:false,
+            success: function (data) {
+                var arr=data.frList;
+                for(var i=0;i<arr.length;i++){
+                    //var roleName=arr[i].fuegoId;
+                    var roleRName=arr[i].fuegoRid;
+                    $("#ccOptions").append('<input type="checkbox" name="lang" value="'+roleRName+'"><span>'+roleRName+'</span><br/>');
+                }
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    }
+
+    function initCCCombobox(){
+        var s = ",";//设定分隔付
+        $('#cc').combo({
+            required: true,//是否验证
+            editable: true,//是否可编辑
+            multiple: true//可否支持多选
+        });
+        $('#sp').appendTo($('#cc').combo('panel'));
+        $('#sp input[name="lang"]').click(function () {
+            s = '';
+            $('input[name="lang"]').each(function(key){
+                if($(this).is(":checked")){
+                    var v = $(this).next('span').text();
+                    s = s + v + ',';
+                }
+            });
+            if(s.length > 0 ){
+                s = s.substring(0, s.length-1);
+            }
+            $('#cc').combo('setValue', s).combo('setText', s).combo('showPanel');//将值赋值给文本框并在文本里显示出来
+        });
+    }
+
+    function selAllCheckbox(obj){
+        $('input[name="lang"]').click();
+        if ($(obj).is(":checked")){
+            //console.log("选中");
+            $('input[name="lang"]').each(function(key){
+                if(!$(this).is(":checked")){
+                    $(this).click();
+                }
+            });
+        }else{
+            //console.log("没有选中");
+            $('input[name="lang"]').each(function(key){
+                if($(this).is(":checked")){
+                    $(this).click();
+                }
+            });
+        }
+    }
+
+    function synUcsRoles(){
+        var people = $("#people").val();
+        var roles = $("input[name=selRoles]").val();
+        // alert(roles+"-----"+people);
+        $.ajax({
+            type: "post",
+            url: baseUrl + "/synUcsRoles",
+            data: {"people":people,"selRoles":roles},
+            dataType: "text",
+            success: function (data) {
+                $("#showMsg4").html("<font color='green'>" + getNowDate() +"执行完毕！</font>");
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    }
+    function migrateData(){
+        $.ajax({
+                type: "post",
+                url: baseUrl + "/migrateData",
+                data: {},
+                dataType: "text",
+                success: function (data) {
+                    $("#showMsg5").html("<font color='green'>" + getNowDate() +"执行完毕！</font>");
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+    }
+</script>
+</html>

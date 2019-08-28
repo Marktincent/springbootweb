@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>pageFooter</title>
+    <link rel="stylesheet" th:href="@{../static/bootstrap-3.3.7/css/bootstrap.css}"/>
+    <script th:src="@{../static/scripts/jquery.min.js}"></script>
+    <script th:src="@{../static/bootstrap-3.3.7/js/bootstrap.js}"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:fragment="pageFooterDiv">
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a th:href="@{${requestUrl}(pageNum=1,pageSize=${pageSize})}" aria-label="首页" id="aaaa">
+                    <span aria-hidden="true">首页</span>
+                </a>
+                <a th:if="${not isFirstPage}" th:href="@{${requestUrl}(pageNum=${pageNum-1},pageSize=${pageSize})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <a th:if="${isFirstPage}" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!--<li th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                    <span th:text="${pageNo}"></span>
+                </a>
+                <a th:if="${not (pageNum eq pageNo)}"
+                   th:href="@{${requestUrl}(pageNum=${pageNo},pageSize=${pageSize})}">
+                    <span th:text="${pageNo}"></span>
+                </a>
+            </li>-->
+
+            <li>
+                <a href="#">
+                    <span th:text="'...'"></span>
+                </a>
+                <a th:if="${not isLastPage}" th:href="@{${requestUrl}(pageNum=${pageNum+1},pageSize=${pageSize})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <a th:if="${isLastPage}" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <a th:href="@{${requestUrl}(pageNum=${totalPages},pageSize=${pageSize})}" aria-label="首页">
+                    <span aria-hidden="true">尾页</span>
+                </a>
+                <a th:if="${pageNum}" href="#">
+                    <span th:text="'当前'+${pageNum}+'页'"></span>
+                </a>
+                <a th:if="${totalPages}" href="#">
+                    <span th:text="'共'+${totalPages}+'页'"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>mybatis分页查询</title>
+    <meta charset="UTF-8"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/static/bootstrap-3.3.7-dist/css/bootstrap.min.css}" media="screen"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/bootstrap-datetimepicker.min.css}" media="screen"/>
+    <script type="text/javascript" th:src="@{/static/scripts/jquery-1.8.3.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/scripts/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/static/scripts/tether.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/scripts/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/scripts/bootstrap-datetimepicker.js}"></script>
+</head>
+<body>
+<div class="container">
+
+    <form th:action="@{/allUsers}" th:method="get">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="username" placeholder="请输入用户名" />
+            </div>
+            <label class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="password" placeholder="请输入密码" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始时间</label>
+            <div class="controls input-append date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1">
+                <input size="16" type="text" value="" readonly name="beginTime">
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+            <input type="hidden" id="dtp_input1" value="" /><br/>
+
+            <label class="col-sm-2 control-label">结束时间</label>
+            <div class="controls input-append date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2">
+                <input size="16" type="text" value="" readonly name="endTime">
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+            <input type="hidden" id="dtp_input2" value="" /><br/>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4">
+                <button class="btn btn-info" type="submit" placeholder="查询">查询</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-striped">
+        <tr>
+            <th>id</th>
+            <th>username</th>
+            <th>password</th>
+            <th>createtime</th>
+        </tr>
+        <tr th:each="user : ${pageInfo}">
+            <!--<td th:text="${user.id}"></td>-->
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.createtime}"></td>
+        </tr>
+    </table>
+
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a th:if="${not isFirstPage}" th:href="@{${'allUsers'}(pageNum=${pageNum-1},pageSize=${pageSize})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <a th:if="${isFirstPage}" href="javascript:void(0);" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                    <span th:text="${pageNo}"></span>
+                </a>
+
+                <a th:if="${not (pageNum eq pageNo)}" th:href="@{${'allUsers'}(pageNum=${pageNo},pageSize=${pageSize})}">
+                    <span th:text="${pageNo}"></span>
+                </a>
+            </li>
+
+            <li>
+                <a th:if="${not isLastPage}" th:href="@{${'allUsers'}(pageNum=${pageNum+1},pageSize=${pageSize})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <a th:if="${isLastPage}" href="javascript:void(0);" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+
+<script type="text/javascript">
+	$('.form_date').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+</script>
+</html>
