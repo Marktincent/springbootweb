@@ -3,9 +3,10 @@ buildscript {
         springBootVersion = '2.0.3.RELEASE'
     }
     repositories {
-        //mavenCentral()
-        maven { url "http://174.34.75.104:8765/repository/maven-releases/" }
-        maven { url "http://174.34.75.104:8765/repository/uaes-ne1-esw/" }
+        mavenCentral()
+        //maven { url "http://174.34.75.104:8765/repository/maven-releases/" }
+        //maven { url "http://174.34.75.104:8765/repository/uaes-ne1-esw/" }
+        maven { url "https://maven.aliyun.com/repository/snapshots" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -26,10 +27,11 @@ configurations {
     mybatisGenerator
 }
 repositories {
-//	mavenCentral()
-    maven { url "http://174.34.75.104:8765/repository/uaes-ne1-esw/" }
-    maven { url "http://174.34.75.104:8765/repository/maven-releases/" }
-    maven { url "http://174.34.75.104:8765/repository/ne1-uaes-jira/" }
+	mavenCentral()
+    maven { url "https://maven.aliyun.com/repository/snapshots" }
+//    maven { url "http://174.34.75.104:8765/repository/uaes-ne1-esw/" }
+//    maven { url "http://174.34.75.104:8765/repository/maven-releases/" }
+//    maven { url "http://174.34.75.104:8765/repository/ne1-uaes-jira/" }
 //	maven {url "http://localhost:8765/repository/uaes-ne1-esw/"}
 //	maven {url "http://localhost:8765/repository/maven-releases/"}
 }
@@ -89,7 +91,7 @@ def getDbProperties = {
     properties
 }
 
-task mybatisGenerate << {
+/*task mybatisGenerate << {
     def properties = getDbProperties()
     ant.properties['targetProject'] = projectDir.path
     ant.properties['driverClass'] = properties.getProperty("jdbc.driverClassName")
@@ -116,7 +118,7 @@ task mybatisGenerate << {
             name: 'mbgenerator',
             classname: 'org.mybatis.generator.ant.GeneratorAntTask',
             classpath: configurations.mybatisGenerator.asPath
-    )
+    )*/
     /*ant.mbgenerator(overwrite: true,
             configfile: 'src/main/resources/mybatis/generatorConfig_mysql.xml', verbose: true) {
         propertyset {
@@ -164,4 +166,4 @@ task mybatisGenerate << {
             propertyref(name: 'sqlMapperPackage')
         }
     }*/
-}
+/*}*/
